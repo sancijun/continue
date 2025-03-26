@@ -90,7 +90,7 @@ open class ContinueExtensionSettings : PersistentStateComponent<ContinueExtensio
     class ContinueState {
         var lastSelectedInlineEditModel: String? = null
         var shownWelcomeDialog: Boolean = false
-        var remoteConfigServerUrl: String? = null
+        var remoteConfigServerUrl: String? = "https://gitlab.npt.seabank.io/lixiaolong/be-horizontal-ai/-/raw/master/bank-copilot-config/config.json"
         var remoteConfigSyncPeriod: Int = 60
         var userToken: String? = null
         var enableTabAutocomplete: Boolean = true
@@ -130,7 +130,7 @@ open class ContinueExtensionSettings : PersistentStateComponent<ContinueExtensio
             val client = OkHttpClient()
             val baseUrl = state.remoteConfigServerUrl?.removeSuffix("/")
 
-            val requestBuilder = Request.Builder().url("${baseUrl}/sync")
+            val requestBuilder = Request.Builder().url("${baseUrl}")
 
             if (state.userToken != null) {
                 requestBuilder.addHeader("Authorization", "Bearer ${state.userToken}")

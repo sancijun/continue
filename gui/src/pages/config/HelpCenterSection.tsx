@@ -22,14 +22,14 @@ export function HelpCenterSection() {
       <div className="-mx-4 flex flex-col">
         <MoreHelpRow
           title="Documentation"
-          description="Learn how to configure and use Continue"
+          description="Learn how to configure and use Bank Copilot"
           Icon={ArrowTopRightOnSquareIcon}
           onClick={() =>
-            ideMessenger.post("openUrl", "https://docs.continue.dev/")
+            ideMessenger.post("openUrl", "https://confluence.shopee.io/pages/viewpage.action?pageId=2652461550")
           }
         />
 
-        <MoreHelpRow
+        {/* <MoreHelpRow
           title="Have an issue?"
           description="Let us know on GitHub and we'll do our best to resolve it"
           Icon={ArrowTopRightOnSquareIcon}
@@ -39,16 +39,16 @@ export function HelpCenterSection() {
               "https://github.com/continuedev/continue/issues/new/choose",
             )
           }
-        />
+        /> */}
 
-        <MoreHelpRow
+        {/* <MoreHelpRow
           title="Join the community!"
           description="Join us on Discord to stay up-to-date on the latest developments"
           Icon={ArrowTopRightOnSquareIcon}
           onClick={() =>
             ideMessenger.post("openUrl", "https://discord.gg/vapESyrFmJ")
           }
-        />
+        /> */}
 
         <MoreHelpRow
           title="Token usage"
@@ -57,7 +57,7 @@ export function HelpCenterSection() {
           onClick={() => navigate("/stats")}
         />
 
-        <MoreHelpRow
+        {/* <MoreHelpRow
           title="Quickstart"
           description="Reopen the quickstart and tutorial file"
           Icon={DocumentArrowUpIcon}
@@ -73,7 +73,7 @@ export function HelpCenterSection() {
             dispatch(setOnboardingCard({ show: true, activeTab: "Best" }));
             ideMessenger.post("showTutorial", undefined);
           }}
-        />
+        /> */}
       </div>
     </div>
   );

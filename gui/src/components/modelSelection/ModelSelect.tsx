@@ -229,7 +229,7 @@ function ModelSelect() {
             ))}
           </div>
 
-          <div className="">
+          {/* <div className="">
             {selectedProfile?.profileType === "local" && (
               <>
                 <ListboxOption
@@ -248,7 +248,7 @@ function ModelSelect() {
             <span className="block px-2 py-1" style={{ color: lightGray }}>
               {getMetaKeyLabel()}' to toggle model
             </span>
-          </div>
+          </div>*/}
         </ListboxOptions>
       </div>
     </Listbox>
