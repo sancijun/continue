@@ -56,7 +56,7 @@ class IntelliJIDE(
     private val ripgrep: String
 
     init {
-        val myPluginId = "com.github.continuedev.continueintellijextension"
+        val myPluginId = "com.bank.copilot.intellij.extension"
         val pluginDescriptor =
             PluginManager.getPlugin(PluginId.getId(myPluginId)) ?: throw Exception("Plugin not found")
 
@@ -78,7 +78,7 @@ class IntelliJIDE(
             remoteName = "ssh"
         }
 
-        val pluginId = "com.github.continuedev.continueintellijextension"
+        val pluginId = "com.bank.copilot.intellij.extension"
         val plugin = PluginManagerCore.getPlugin(PluginId.getId(pluginId))
         val extensionVersion = plugin?.version ?: "Unknown"
 

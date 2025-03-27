@@ -42,7 +42,7 @@ class AutocompleteSpinnerWidget(project: Project) : EditorBasedWidget(project), 
 
     override fun getTooltipText(): String {
         val enabled = service<ContinueExtensionSettings>().state.enableTabAutocomplete
-        return if (enabled) "Continue autocomplete enabled" else "Continue autocomplete disabled"
+        return if (enabled) "Bank Copilot autocomplete enabled" else "Bank Copilot autocomplete disabled"
     }
 
     override fun getClickConsumer(): Consumer<MouseEvent>? {

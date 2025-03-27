@@ -81,7 +81,7 @@ const vscodeShortcuts: KeyboardShortcutProps[] = [
     mac: "⌘ L",
     windows: "⌃ L",
     description:
-      "New Chat / New Chat With Selected Code / Close Continue Sidebar If Chat Already In Focus",
+      "New Chat / New Chat With Selected Code / Close Bank Copilot Sidebar If Chat Already In Focus",
   },
   {
     mac: "⌘ ⌫",
@@ -97,7 +97,7 @@ const vscodeShortcuts: KeyboardShortcutProps[] = [
     mac: "⌘ ⇧ L",
     windows: "⌃ ⇧ L",
     description:
-      "Focus Current Chat / Add Selected Code To Current Chat / Close Continue Sidebar If Chat Already In Focus",
+      "Focus Current Chat / Add Selected Code To Current Chat / Close Bank Copilot Sidebar If Chat Already In Focus",
   },
   {
     mac: "⌘ ⇧ R",
@@ -151,7 +151,7 @@ const jetbrainsShortcuts: KeyboardShortcutProps[] = [
     mac: "⌘ J",
     windows: "⌃ J",
     description:
-      "New Chat / New Chat With Selected Code / Close Continue Sidebar If Chat Already In Focus",
+      "New Chat / New Chat With Selected Code / Close Bank Copilot Sidebar If Chat Already In Focus",
   },
   {
     mac: "⌘ ⌫",
@@ -167,7 +167,7 @@ const jetbrainsShortcuts: KeyboardShortcutProps[] = [
     mac: "⌘ ⇧ J",
     windows: "⌃ ⇧ J",
     description:
-      "Focus Current Chat / Add Selected Code To Current Chat / Close Continue Sidebar If Chat Already In Focus",
+      "Focus Current Chat / Add Selected Code To Current Chat / Close Bank Copilot Sidebar If Chat Already In Focus",
   },
   {
     mac: "⌘ ⇧ ⌫",
