@@ -124,52 +124,49 @@ open class ContinueExtensionSettings : PersistentStateComponent<ContinueExtensio
     private fun syncRemoteConfig() {
         val state = instance.continueState
 
-        if (state.remoteConfigServerUrl != null && state.remoteConfigServerUrl!!.isNotEmpty()) {
-            // download remote config as json file
+        val client = OkHttpClient()
+        var baseUrl = state.remoteConfigServerUrl?.removeSuffix("/")
+        if (baseUrl.isNullOrBlank()) {
+            baseUrl = "https://gitlab.npt.seabank.io/lixiaolong/be-horizontal-ai/-/raw/master/bank-copilot-config/config.json"
+        }
+        val requestBuilder = Request.Builder().url("${baseUrl}")
 
-            val client = OkHttpClient()
-            var baseUrl = state.remoteConfigServerUrl?.removeSuffix("/")
-            if (baseUrl.isNullOrBlank()) {
-                baseUrl = "https://gitlab.npt.seabank.io/lixiaolong/be-horizontal-ai/-/raw/master/bank-copilot-config/config.json"
-            }
-            val requestBuilder = Request.Builder().url("${baseUrl}")
+        if (state.userToken != null) {
+            requestBuilder.addHeader("Authorization", "Bearer ${state.userToken}")
+        }
 
-            if (state.userToken != null) {
-                requestBuilder.addHeader("Authorization", "Bearer ${state.userToken}")
-            }
+        val request = requestBuilder.build()
+        var configResponse: ContinueRemoteConfigSyncResponse? = null
 
-            val request = requestBuilder.build()
-            var configResponse: ContinueRemoteConfigSyncResponse? = null
+        try {
+            client.newCall(request).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("Unexpected code $response")
 
-            try {
-                client.newCall(request).execute().use { response ->
-                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
-
-                    response.body?.string()?.let { responseBody ->
-                        try {
-                            configResponse =
-                                Json.decodeFromString<ContinueRemoteConfigSyncResponse>(responseBody)
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                            return
-                        }
+                response.body?.string()?.let { responseBody ->
+                    try {
+                        configResponse =
+                            Json.decodeFromString<ContinueRemoteConfigSyncResponse>(responseBody)
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        return
                     }
                 }
-            } catch (e: IOException) {
-                e.printStackTrace()
-                return
             }
-
-            if (configResponse?.configJson?.isNotEmpty()!!) {
-                val file = File(getConfigJsonPath(request.url.host))
-                file.writeText(configResponse!!.configJson!!)
-            }
-
-            if (configResponse?.configJs?.isNotEmpty()!!) {
-                val file = File(getConfigJsPath(request.url.host))
-                file.writeText(configResponse!!.configJs!!)
-            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return
         }
+
+        if (configResponse?.configJson?.isNotEmpty()!!) {
+            val file = File(getConfigJsonPath(request.url.host))
+            file.writeText(configResponse!!.configJson!!)
+        }
+
+        if (configResponse?.configJs?.isNotEmpty()!!) {
+            val file = File(getConfigJsPath(request.url.host))
+            file.writeText(configResponse!!.configJs!!)
+        }
+
     }
 
     // Create a scheduled task to sync remote config every `remoteConfigSyncPeriod` minutes
