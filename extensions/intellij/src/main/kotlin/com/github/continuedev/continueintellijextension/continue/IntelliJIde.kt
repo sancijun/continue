@@ -481,7 +481,7 @@ class IntelliJIDE(
             val deferred = CompletableDeferred<String?>()
             val icon = IconLoader.getIcon("/icons/continue.svg", javaClass)
 
-            val notification = NotificationGroupManager.getInstance().getNotificationGroup("Continue")
+            val notification = NotificationGroupManager.getInstance().getNotificationGroup("Bank Copilot")
                 .createNotification(message, notificationType).setIcon(icon)
 
             val buttonTexts = otherParams.filterIsInstance<String>().toTypedArray()
