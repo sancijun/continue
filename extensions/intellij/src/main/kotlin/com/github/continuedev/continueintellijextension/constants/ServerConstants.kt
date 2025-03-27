@@ -94,6 +94,7 @@ fun getConfigJsonPath(remoteHostname: String? = null): String {
           else getContinueGlobalPath(),
           "config.json")
   if (Files.notExists(path)) {
+    Files.createDirectories(path.parent)
     Files.createFile(path)
     Files.writeString(path, if (remoteHostname == null) DEFAULT_CONFIG else "{}")
   }
