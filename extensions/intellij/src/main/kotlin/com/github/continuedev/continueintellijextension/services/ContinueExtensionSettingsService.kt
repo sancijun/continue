@@ -90,7 +90,7 @@ open class ContinueExtensionSettings : PersistentStateComponent<ContinueExtensio
     class ContinueState {
         var lastSelectedInlineEditModel: String? = null
         var shownWelcomeDialog: Boolean = false
-        var remoteConfigServerUrl: String? = ""
+        var remoteConfigServerUrl: String? = "https://gitlab.npt.seabank.io/lixiaolong/be-horizontal-ai/-/raw/master/bank-copilot-config/config.json"
         var remoteConfigSyncPeriod: Int = 60
         var userToken: String? = null
         var enableTabAutocomplete: Boolean = true
@@ -107,10 +107,16 @@ open class ContinueExtensionSettings : PersistentStateComponent<ContinueExtensio
     private var remoteSyncFuture: ScheduledFuture<*>? = null
 
     override fun getState(): ContinueState {
+        if (continueState.remoteConfigServerUrl.isNullOrEmpty()) {
+            continueState.remoteConfigServerUrl = "https://gitlab.npt.seabank.io/lixiaolong/be-horizontal-ai/-/raw/master/bank-copilot-config/config.json"
+        }
         return continueState
     }
 
     override fun loadState(state: ContinueState) {
+        if (state.remoteConfigServerUrl.isNullOrEmpty()) {
+            state.remoteConfigServerUrl = "https://gitlab.npt.seabank.io/lixiaolong/be-horizontal-ai/-/raw/master/bank-copilot-config/config.json"
+        }
         continueState = state
     }
 
@@ -124,47 +130,49 @@ open class ContinueExtensionSettings : PersistentStateComponent<ContinueExtensio
     private fun syncRemoteConfig() {
         val state = instance.continueState
 
-        val client = OkHttpClient()
-        var baseUrl = state.remoteConfigServerUrl?.removeSuffix("/")
-        if (baseUrl.isNullOrBlank()) {
-            baseUrl = "https://gitlab.npt.seabank.io/lixiaolong/be-horizontal-ai/-/raw/master/bank-copilot-config/config.json"
-        }
-        val requestBuilder = Request.Builder().url("${baseUrl}")
+        if (state.remoteConfigServerUrl != null && state.remoteConfigServerUrl!!.isNotEmpty()) {
+            // download remote config as json file
 
-        if (state.userToken != null) {
-            requestBuilder.addHeader("Authorization", "Bearer ${state.userToken}")
-        }
+            val client = OkHttpClient()
+            val baseUrl = state.remoteConfigServerUrl?.removeSuffix("/")
 
-        val request = requestBuilder.build()
-        var configResponse: ContinueRemoteConfigSyncResponse? = null
+            val requestBuilder = Request.Builder().url("${baseUrl}")
 
-        try {
-            client.newCall(request).execute().use { response ->
-                if (!response.isSuccessful) throw IOException("Unexpected code $response")
+            if (state.userToken != null) {
+                requestBuilder.addHeader("Authorization", "Bearer ${state.userToken}")
+            }
 
-                response.body?.string()?.let { responseBody ->
-                    try {
-                        configResponse =
-                            Json.decodeFromString<ContinueRemoteConfigSyncResponse>(responseBody)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        return
+            val request = requestBuilder.build()
+            var configResponse: ContinueRemoteConfigSyncResponse? = null
+
+            try {
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) throw IOException("Unexpected code $response")
+
+                    response.body?.string()?.let { responseBody ->
+                        try {
+                            configResponse =
+                                Json.decodeFromString<ContinueRemoteConfigSyncResponse>(responseBody)
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                            return
+                        }
                     }
                 }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                return
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
-            return
-        }
 
-        if (configResponse?.configJson?.isNotEmpty()!!) {
-            val file = File(getConfigJsonPath(request.url.host))
-            file.writeText(configResponse!!.configJson!!)
-        }
+            if (configResponse?.configJson?.isNotEmpty()!!) {
+                val file = File(getConfigJsonPath(request.url.host))
+                file.writeText(configResponse!!.configJson!!)
+            }
 
-        if (configResponse?.configJs?.isNotEmpty()!!) {
-            val file = File(getConfigJsPath(request.url.host))
-            file.writeText(configResponse!!.configJs!!)
+            if (configResponse?.configJs?.isNotEmpty()!!) {
+                val file = File(getConfigJsPath(request.url.host))
+                file.writeText(configResponse!!.configJs!!)
+            }
         }
 
     }
